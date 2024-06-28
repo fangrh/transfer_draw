@@ -13,12 +13,12 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>25</y>
-     <width>244</width>
+     <width>252</width>
      <height>311</height>
     </rect>
    </property>
@@ -39,13 +39,22 @@
     </item>
     <item row="1" column="0">
      <widget class="QDoubleSpinBox" name="SizeSpeed">
+      <property name="decimals">
+       <number>6</number>
+      </property>
+      <property name="singleStep">
+       <double>0.005000000000000</double>
+      </property>
       <property name="value">
-       <double>0.010000000000000</double>
+       <double>0.005000000000000</double>
       </property>
      </widget>
     </item>
     <item row="1" column="1" colspan="2">
      <widget class="QDoubleSpinBox" name="lineEdit_Size">
+      <property name="decimals">
+       <number>6</number>
+      </property>
       <property name="value">
        <double>1.000000000000000</double>
       </property>
@@ -88,6 +97,9 @@
     </item>
     <item row="4" column="0">
      <widget class="QDoubleSpinBox" name="AngleSpeed">
+      <property name="decimals">
+       <number>6</number>
+      </property>
       <property name="value">
        <double>1.000000000000000</double>
       </property>
@@ -95,11 +107,17 @@
     </item>
     <item row="4" column="1" colspan="2">
      <widget class="QDoubleSpinBox" name="lineEdit_Angle">
+      <property name="decimals">
+       <number>6</number>
+      </property>
       <property name="minimum">
        <double>-1000.000000000000000</double>
       </property>
       <property name="maximum">
        <double>1000.000000000000000</double>
+      </property>
+      <property name="value">
+       <double>0.000000000000000</double>
       </property>
      </widget>
     </item>

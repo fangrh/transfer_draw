@@ -24,114 +24,120 @@ class Ui_Controller(object):
         if not Controller.objectName():
             Controller.setObjectName(u"Controller")
         Controller.resize(275, 383)
-        self.widget = QWidget(Controller)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(10, 25, 244, 311))
-        self.gridLayout = QGridLayout(self.widget)
+        self.layoutWidget = QWidget(Controller)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(10, 25, 252, 311))
+        self.gridLayout = QGridLayout(self.layoutWidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.label_8 = QLabel(self.widget)
+        self.label_8 = QLabel(self.layoutWidget)
         self.label_8.setObjectName(u"label_8")
 
         self.gridLayout.addWidget(self.label_8, 0, 0, 1, 1)
 
-        self.label_9 = QLabel(self.widget)
+        self.label_9 = QLabel(self.layoutWidget)
         self.label_9.setObjectName(u"label_9")
 
         self.gridLayout.addWidget(self.label_9, 0, 1, 1, 2)
 
-        self.SizeSpeed = QDoubleSpinBox(self.widget)
+        self.SizeSpeed = QDoubleSpinBox(self.layoutWidget)
         self.SizeSpeed.setObjectName(u"SizeSpeed")
-        self.SizeSpeed.setValue(0.010000000000000)
+        self.SizeSpeed.setDecimals(6)
+        self.SizeSpeed.setSingleStep(0.005000000000000)
+        self.SizeSpeed.setValue(0.005000000000000)
 
         self.gridLayout.addWidget(self.SizeSpeed, 1, 0, 1, 1)
 
-        self.lineEdit_Size = QDoubleSpinBox(self.widget)
+        self.lineEdit_Size = QDoubleSpinBox(self.layoutWidget)
         self.lineEdit_Size.setObjectName(u"lineEdit_Size")
+        self.lineEdit_Size.setDecimals(6)
         self.lineEdit_Size.setValue(1.000000000000000)
 
         self.gridLayout.addWidget(self.lineEdit_Size, 1, 1, 1, 2)
 
-        self.label_10 = QLabel(self.widget)
+        self.label_10 = QLabel(self.layoutWidget)
         self.label_10.setObjectName(u"label_10")
 
         self.gridLayout.addWidget(self.label_10, 2, 0, 1, 1)
 
-        self.SizeDown = QPushButton(self.widget)
+        self.SizeDown = QPushButton(self.layoutWidget)
         self.SizeDown.setObjectName(u"SizeDown")
 
         self.gridLayout.addWidget(self.SizeDown, 2, 1, 1, 1)
 
-        self.SizeUp = QPushButton(self.widget)
+        self.SizeUp = QPushButton(self.layoutWidget)
         self.SizeUp.setObjectName(u"SizeUp")
 
         self.gridLayout.addWidget(self.SizeUp, 2, 2, 1, 1)
 
-        self.label = QLabel(self.widget)
+        self.label = QLabel(self.layoutWidget)
         self.label.setObjectName(u"label")
 
         self.gridLayout.addWidget(self.label, 3, 0, 1, 1)
 
-        self.label_2 = QLabel(self.widget)
+        self.label_2 = QLabel(self.layoutWidget)
         self.label_2.setObjectName(u"label_2")
 
         self.gridLayout.addWidget(self.label_2, 3, 1, 1, 1)
 
-        self.AngleSpeed = QDoubleSpinBox(self.widget)
+        self.AngleSpeed = QDoubleSpinBox(self.layoutWidget)
         self.AngleSpeed.setObjectName(u"AngleSpeed")
+        self.AngleSpeed.setDecimals(6)
         self.AngleSpeed.setValue(1.000000000000000)
 
         self.gridLayout.addWidget(self.AngleSpeed, 4, 0, 1, 1)
 
-        self.lineEdit_Angle = QDoubleSpinBox(self.widget)
+        self.lineEdit_Angle = QDoubleSpinBox(self.layoutWidget)
         self.lineEdit_Angle.setObjectName(u"lineEdit_Angle")
+        self.lineEdit_Angle.setDecimals(6)
         self.lineEdit_Angle.setMinimum(-1000.000000000000000)
         self.lineEdit_Angle.setMaximum(1000.000000000000000)
+        self.lineEdit_Angle.setValue(0.000000000000000)
 
         self.gridLayout.addWidget(self.lineEdit_Angle, 4, 1, 1, 2)
 
-        self.label_5 = QLabel(self.widget)
+        self.label_5 = QLabel(self.layoutWidget)
         self.label_5.setObjectName(u"label_5")
 
         self.gridLayout.addWidget(self.label_5, 5, 0, 1, 1)
 
-        self.AngleDown = QPushButton(self.widget)
+        self.AngleDown = QPushButton(self.layoutWidget)
         self.AngleDown.setObjectName(u"AngleDown")
 
         self.gridLayout.addWidget(self.AngleDown, 5, 1, 1, 1)
 
-        self.AngleUp = QPushButton(self.widget)
+        self.AngleUp = QPushButton(self.layoutWidget)
         self.AngleUp.setObjectName(u"AngleUp")
 
         self.gridLayout.addWidget(self.AngleUp, 5, 2, 1, 1)
 
-        self.label_15 = QLabel(self.widget)
+        self.label_15 = QLabel(self.layoutWidget)
         self.label_15.setObjectName(u"label_15")
 
         self.gridLayout.addWidget(self.label_15, 6, 0, 1, 1)
 
-        self.QCheckBoxMirror = QCheckBox(self.widget)
+        self.QCheckBoxMirror = QCheckBox(self.layoutWidget)
         self.QCheckBoxMirror.setObjectName(u"QCheckBoxMirror")
         self.QCheckBoxMirror.setChecked(False)
 
         self.gridLayout.addWidget(self.QCheckBoxMirror, 6, 1, 1, 1)
 
-        self.label_14 = QLabel(self.widget)
+        self.label_14 = QLabel(self.layoutWidget)
         self.label_14.setObjectName(u"label_14")
 
         self.gridLayout.addWidget(self.label_14, 7, 0, 1, 1)
 
-        self.QCheckBoxOutline = QCheckBox(self.widget)
+        self.QCheckBoxOutline = QCheckBox(self.layoutWidget)
         self.QCheckBoxOutline.setObjectName(u"QCheckBoxOutline")
 
         self.gridLayout.addWidget(self.QCheckBoxOutline, 7, 1, 1, 1)
 
-        self.label_16 = QLabel(self.widget)
+        self.label_16 = QLabel(self.layoutWidget)
         self.label_16.setObjectName(u"label_16")
 
         self.gridLayout.addWidget(self.label_16, 8, 0, 1, 1)
 
-        self.comboBoxColor = QComboBox(self.widget)
+        self.comboBoxColor = QComboBox(self.layoutWidget)
         self.comboBoxColor.addItem("")
         self.comboBoxColor.addItem("")
         self.comboBoxColor.addItem("")
@@ -143,12 +149,12 @@ class Ui_Controller(object):
 
         self.gridLayout.addWidget(self.comboBoxColor, 8, 1, 1, 1)
 
-        self.label_12 = QLabel(self.widget)
+        self.label_12 = QLabel(self.layoutWidget)
         self.label_12.setObjectName(u"label_12")
 
         self.gridLayout.addWidget(self.label_12, 9, 0, 1, 1)
 
-        self.QSlider_threshold1 = QSlider(self.widget)
+        self.QSlider_threshold1 = QSlider(self.layoutWidget)
         self.QSlider_threshold1.setObjectName(u"QSlider_threshold1")
         self.QSlider_threshold1.setMaximum(1000)
         self.QSlider_threshold1.setValue(50)
@@ -156,12 +162,12 @@ class Ui_Controller(object):
 
         self.gridLayout.addWidget(self.QSlider_threshold1, 9, 1, 1, 2)
 
-        self.label_13 = QLabel(self.widget)
+        self.label_13 = QLabel(self.layoutWidget)
         self.label_13.setObjectName(u"label_13")
 
         self.gridLayout.addWidget(self.label_13, 10, 0, 1, 1)
 
-        self.QSlider_threshold2 = QSlider(self.widget)
+        self.QSlider_threshold2 = QSlider(self.layoutWidget)
         self.QSlider_threshold2.setObjectName(u"QSlider_threshold2")
         self.QSlider_threshold2.setMaximum(1000)
         self.QSlider_threshold2.setValue(50)
@@ -169,12 +175,12 @@ class Ui_Controller(object):
 
         self.gridLayout.addWidget(self.QSlider_threshold2, 10, 1, 1, 2)
 
-        self.label_11 = QLabel(self.widget)
+        self.label_11 = QLabel(self.layoutWidget)
         self.label_11.setObjectName(u"label_11")
 
         self.gridLayout.addWidget(self.label_11, 11, 0, 1, 1)
 
-        self.QSliderTransparency = QSlider(self.widget)
+        self.QSliderTransparency = QSlider(self.layoutWidget)
         self.QSliderTransparency.setObjectName(u"QSliderTransparency")
         self.QSliderTransparency.setMaximum(100)
         self.QSliderTransparency.setSingleStep(1)
