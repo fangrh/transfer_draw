@@ -1,22 +1,22 @@
-import cv2  # 导入OpenCV库
+import cv2
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QLabel, QVBoxLayout, QWidget
 from PySide6.QtGui import QPixmap, QTransform, QImage, QPainter
 from PySide6.QtCore import Qt, Signal, QSize, QPoint
-from transfer_shape_ui import Ui_TransferShape  # 引入生成的UI文件中的类
-from control_ui import Ui_Controller  # 引入生成的UI文件中的类
+from transfer_shape_ui import Ui_TransferShape
+from control_ui import Ui_Controller
 import sys
 import math
 import numpy as np
 
 class Controller(QMainWindow):
-    sizeChanged = Signal(float)  # Signal for size change
-    angleChanged = Signal(float)  # Signal for angle change
-    transparencyChanged = Signal(int)  # Signal for transparency change
-    mirrorChanged = Signal(bool)  # Signal for mirror change
-    outlineChanged = Signal(bool)  # Signal for outline change
-    threshold1Changed = Signal(int)  # Signal for threshold1 change
-    threshold2Changed = Signal(int)  # Signal for threshold2 change
-    colorChanged = Signal(str)  # Signal for color change
+    sizeChanged = Signal(float)
+    angleChanged = Signal(float)
+    transparencyChanged = Signal(int)
+    mirrorChanged = Signal(bool)
+    outlineChanged = Signal(bool)
+    threshold1Changed = Signal(int)
+    threshold2Changed = Signal(int)
+    colorChanged = Signal(str)
     
     def __init__(self):
         super(Controller, self).__init__()
@@ -41,28 +41,28 @@ class Controller(QMainWindow):
         self.ui.AngleUp.clicked.connect(self.on_angle_up)
 
     def on_size_changed(self, value):
-        self.sizeChanged.emit(value)  # Emit sizeChanged signal
+        self.sizeChanged.emit(value)
 
     def on_angle_changed(self, value):
-        self.angleChanged.emit(value)  # Emit angleChanged signal
+        self.angleChanged.emit(value)
 
     def on_transparency_changed(self, value):
-        self.transparencyChanged.emit(value)  # Emit transparencyChanged signal
+        self.transparencyChanged.emit(value)
     
     def on_mirror_changed(self, state):
-        self.mirrorChanged.emit(state == 2)  # Emit mirrorChanged signal
+        self.mirrorChanged.emit(state == 2)
 
     def on_outline_changed(self, state):
-        self.outlineChanged.emit(state == 2)  # Emit outlineChanged signal
+        self.outlineChanged.emit(state == 2)
 
     def on_threshold1_changed(self, value):
-        self.threshold1Changed.emit(value)  # Emit threshold1Changed signal
+        self.threshold1Changed.emit(value)
 
     def on_threshold2_changed(self, value):
-        self.threshold2Changed.emit(value)  # Emit threshold2Changed signal
+        self.threshold2Changed.emit(value)
 
     def on_color_changed(self, color):
-        self.colorChanged.emit(color)  # Emit colorChanged signal
+        self.colorChanged.emit(color)
 
     def on_size_down(self):
         try:
@@ -70,7 +70,7 @@ class Controller(QMainWindow):
             new_size = max(0.0, current_size - self.ui.SizeSpeed.value())
             self.ui.lineEdit_Size.setValue(new_size)
         except ValueError:
-            pass  # Ignore invalid input
+            pass
 
     def on_size_up(self):
         try:
@@ -78,7 +78,7 @@ class Controller(QMainWindow):
             new_size = current_size + self.ui.SizeSpeed.value()
             self.ui.lineEdit_Size.setValue(new_size)
         except ValueError:
-            pass  # Ignore invalid input
+            pass
 
     def on_angle_down(self):
         try:
@@ -86,7 +86,7 @@ class Controller(QMainWindow):
             new_angle = current_angle - self.ui.AngleSpeed.value()
             self.ui.lineEdit_Angle.setValue(new_angle)
         except ValueError:
-            pass  # Ignore invalid input
+            pass
 
     def on_angle_up(self):
         try:
@@ -94,12 +94,12 @@ class Controller(QMainWindow):
             new_angle = current_angle + self.ui.AngleSpeed.value()
             self.ui.lineEdit_Angle.setValue(new_angle)
         except ValueError:
-            pass  # Ignore invalid input
+            pass
 
 
 class ChildWindowMove(QMainWindow):
-    moved = Signal(QPoint)  # 自定义信号，用于窗口移动时发送位置
-    resized = Signal(QSize)  # 自定义信号，用于窗口大小改变时发送尺寸
+    moved = Signal(QPoint)
+    resized = Signal(QSize)
 
     def __init__(self):
         super(ChildWindowMove, self).__init__()
@@ -117,15 +117,15 @@ class ChildWindowMove(QMainWindow):
         container.setLayout(layout)
         self.setCentralWidget(container)
         
-        self.setMinimumSize(200, 100)  # Set minimum window size
+        self.setMinimumSize(200, 100)
 
     def moveEvent(self, event):
         super(ChildWindowMove, self).moveEvent(event)
-        self.moved.emit(self.pos())  # 发出移动信号，传递当前位置
+        self.moved.emit(self.pos())
 
     def resizeEvent(self, event):
         super(ChildWindowMove, self).resizeEvent(event)
-        self.resized.emit(self.size())  # 发出大小改变信号
+        self.resized.emit(self.size())
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -172,16 +172,16 @@ class MainWindow(QMainWindow):
         self.ui.actionControl.triggered.connect(self.open_control_window)
         self.control_window = None
 
-        self.current_scale = 1.0  # Initial scale
-        self.current_angle = 0.0  # Initial angle
-        self.current_transparency = 255  # Initial transparency (0-255)
-        self.mirror_enabled = False  # Initial mirror state
-        self.outline_enabled = False  # Initial outline state
-        self.threshold1 = 100  # Initial threshold1 for edge detection
-        self.threshold2 = 200  # Initial threshold2 for edge detection
-        self.outline_color = "White"  # Initial color for outline
+        self.current_scale = 1.0
+        self.current_angle = 0.0
+        self.current_transparency = 255
+        self.mirror_enabled = False
+        self.outline_enabled = False
+        self.threshold1 = 100
+        self.threshold2 = 200
+        self.outline_color = "White"
 
-        self.setMinimumSize(200, 200)  # Set minimum window size
+        self.setMinimumSize(200, 200)
         self.center_main_window()
         self.create_child_window()
         self.open_control_window()
@@ -195,8 +195,8 @@ class MainWindow(QMainWindow):
     def open_image(self):
         file_name, _ = QFileDialog.getOpenFileName(self, "Open Image File", "", "Image Files (*.png *.jpg *.bmp)")
         if file_name:
-            self.pixmap = QPixmap(file_name)  # Save original pixmap
-            self.image = cv2.imread(file_name)  # 使用OpenCV读取图像
+            self.pixmap = QPixmap(file_name)
+            self.image = cv2.imread(file_name)
             self.update_image_size()
 
     def update_image_size(self):
@@ -205,16 +205,14 @@ class MainWindow(QMainWindow):
             transformed_pixmap = self.pixmap.scaled(new_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             transform = QTransform().rotate(self.current_angle)
             if self.mirror_enabled:
-                transform.scale(-1, 1)  # Apply mirror transformation
+                transform.scale(-1, 1)
             transformed_pixmap = transformed_pixmap.transformed(transform, Qt.SmoothTransformation)
 
             if self.outline_enabled:
-                # Convert image to contour image
-                contour_image = self.get_contour_image(self.image, self.threshold1, self.threshold2, self.outline_color)
+                contour_image = self.get_contour_image(self.image, self.threshold1, self.threshold2, self.outline_color, self.current_scale, self.current_angle, self.mirror_enabled)
                 qimage = QImage(contour_image.data, contour_image.shape[1], contour_image.shape[0], contour_image.strides[0], QImage.Format_ARGB32)
                 transformed_pixmap = QPixmap.fromImage(qimage)
 
-            # Apply transparency
             transparent_pixmap = QPixmap(transformed_pixmap.size())
             transparent_pixmap.fill(Qt.transparent)
             painter = QPainter(transparent_pixmap)
@@ -225,14 +223,26 @@ class MainWindow(QMainWindow):
             self.image_label.setPixmap(transparent_pixmap)
             self.resize_main_window_to_image(transformed_pixmap.size())
 
-    def get_contour_image(self, image, threshold1, threshold2, color_name):
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        edges = cv2.Canny(gray, threshold1, threshold2)  # 使用Canny边缘检测
+    def get_contour_image(self, image, threshold1, threshold2, color_name, scale, angle, mirror_enabled):
+        # Resize the image
+        height, width = image.shape[:2]
+        new_size = (int(width * scale), int(height * scale))
+        resized_image = cv2.resize(image, new_size)
 
-        # 创建一个全透明的图像
+        # Rotate the image
+        center = (new_size[0] // 2, new_size[1] // 2)
+        rot_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+        rotated_image = cv2.warpAffine(resized_image, rot_matrix, new_size)
+
+        # Mirror the image if needed
+        if mirror_enabled:
+            rotated_image = cv2.flip(rotated_image, 1)
+
+        gray = cv2.cvtColor(rotated_image, cv2.COLOR_BGR2GRAY)
+        edges = cv2.Canny(gray, threshold1, threshold2)
+
         transparent_image = np.zeros((edges.shape[0], edges.shape[1], 4), dtype=np.uint8)
 
-        # 颜色字典，颜色顺序为BGR
         color_dict = {
             "White": [255, 255, 255, 255],
             "Blue": [255, 0, 0, 255],
@@ -245,9 +255,8 @@ class MainWindow(QMainWindow):
 
         color = color_dict.get(color_name, [255, 255, 255, 255])
 
-        # 设置轮廓部分为选定的颜色，其他部分为透明
         transparent_image[edges != 0] = color
-        transparent_image[edges == 0] = [0, 0, 0, 0]  # 透明
+        transparent_image[edges == 0] = [0, 0, 0, 0]
 
         return transparent_image
 
@@ -275,16 +284,15 @@ class MainWindow(QMainWindow):
     def open_control_window(self):
         if self.control_window is None:
             self.control_window = Controller()
-            self.control_window.sizeChanged.connect(self.on_scale_changed)  # Connect signal
-            self.control_window.angleChanged.connect(self.on_angle_changed)  # Connect signal
-            self.control_window.transparencyChanged.connect(self.on_transparency_changed)  # Connect signal
-            self.control_window.mirrorChanged.connect(self.on_mirror_changed)  # Connect signal
-            self.control_window.outlineChanged.connect(self.on_outline_changed)  # Connect signal
-            self.control_window.threshold1Changed.connect(self.on_threshold1_changed)  # Connect signal
-            self.control_window.threshold2Changed.connect(self.on_threshold2_changed)  # Connect signal
-            self.control_window.colorChanged.connect(self.on_color_changed)  # Connect signal
+            self.control_window.sizeChanged.connect(self.on_scale_changed)
+            self.control_window.angleChanged.connect(self.on_angle_changed)
+            self.control_window.transparencyChanged.connect(self.on_transparency_changed)
+            self.control_window.mirrorChanged.connect(self.on_mirror_changed)
+            self.control_window.outlineChanged.connect(self.on_outline_changed)
+            self.control_window.threshold1Changed.connect(self.on_threshold1_changed)
+            self.control_window.threshold2Changed.connect(self.on_threshold2_changed)
+            self.control_window.colorChanged.connect(self.on_color_changed)
         
-        # Move control window to bottom-right corner of the screen
         screen_geometry = QApplication.primaryScreen().geometry()
         control_width = self.control_window.width()
         control_height = self.control_window.height()
