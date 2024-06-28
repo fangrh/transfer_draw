@@ -165,7 +165,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.image_label)
 
         self.ui.actionOpen.triggered.connect(self.open_image)
-        self.ui.actionClose.triggered.connect(self.close)
+        self.ui.actionClose.triggered.connect(self.close_all_windows)
         self.ui.actionMinimize.triggered.connect(self.showMinimized)
         self.ui.actionMove.triggered.connect(self.create_child_window)
         self.child_window = None
@@ -336,6 +336,12 @@ class MainWindow(QMainWindow):
         if self.outline_enabled:
             self.update_image_size()
 
+    def close_all_windows(self):
+        if self.child_window:
+            self.child_window.close()
+        if self.control_window:
+            self.control_window.close()
+        self.close()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

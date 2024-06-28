@@ -42,7 +42,7 @@ class Ui_Controller(object):
 
         self.SizeSpeed = QDoubleSpinBox(self.widget)
         self.SizeSpeed.setObjectName(u"SizeSpeed")
-        self.SizeSpeed.setValue(0.100000000000000)
+        self.SizeSpeed.setValue(0.010000000000000)
 
         self.gridLayout.addWidget(self.SizeSpeed, 1, 0, 1, 1)
 
