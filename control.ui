@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>353</width>
-    <height>572</height>
+    <width>313</width>
+    <height>292</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -177,9 +177,9 @@
      </widget>
     </item>
     <item row="9" column="1" colspan="2">
-     <widget class="QSlider" name="horizontalSlider_3">
+     <widget class="QSlider" name="QSliderTransparency">
       <property name="maximum">
-       <number>99</number>
+       <number>100</number>
       </property>
       <property name="singleStep">
        <number>1</number>

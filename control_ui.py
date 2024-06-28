@@ -23,7 +23,7 @@ class Ui_Controller(object):
     def setupUi(self, Controller):
         if not Controller.objectName():
             Controller.setObjectName(u"Controller")
-        Controller.resize(353, 572)
+        Controller.resize(313, 292)
         self.widget = QWidget(Controller)
         self.widget.setObjectName(u"widget")
         self.widget.setGeometry(QRect(10, 20, 297, 259))
@@ -139,14 +139,14 @@ class Ui_Controller(object):
 
         self.gridLayout.addWidget(self.label_11, 9, 0, 1, 1)
 
-        self.horizontalSlider_3 = QSlider(self.widget)
-        self.horizontalSlider_3.setObjectName(u"horizontalSlider_3")
-        self.horizontalSlider_3.setMaximum(99)
-        self.horizontalSlider_3.setSingleStep(1)
-        self.horizontalSlider_3.setValue(50)
-        self.horizontalSlider_3.setOrientation(Qt.Horizontal)
+        self.QSliderTransparency = QSlider(self.widget)
+        self.QSliderTransparency.setObjectName(u"QSliderTransparency")
+        self.QSliderTransparency.setMaximum(100)
+        self.QSliderTransparency.setSingleStep(1)
+        self.QSliderTransparency.setValue(50)
+        self.QSliderTransparency.setOrientation(Qt.Horizontal)
 
-        self.gridLayout.addWidget(self.horizontalSlider_3, 9, 1, 1, 2)
+        self.gridLayout.addWidget(self.QSliderTransparency, 9, 1, 1, 2)
 
 
         self.retranslateUi(Controller)

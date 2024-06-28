@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QLabel, QVBoxLayout, QWidget
-from PySide6.QtGui import QPixmap, QTransform
+from PySide6.QtGui import QPixmap, QTransform, QPainter
 from PySide6.QtCore import Qt, Signal, QSize, QPoint
 from transfer_shape_ui import Ui_TransferShape  # 引入生成的UI文件中的类
 from control_ui import Ui_Controller  # 引入生成的UI文件中的类
@@ -7,36 +7,38 @@ import sys
 import math
 
 class Controller(QMainWindow):
-    sizeChanged = Signal(float)  # 自定义信号，用于比例改变
-    angleChanged = Signal(float)  # 自定义信号，用于角度改变
+    sizeChanged = Signal(float)  # Signal for size change
+    angleChanged = Signal(float)  # Signal for angle change
+    transparencyChanged = Signal(int)  # Signal for transparency change
     
     def __init__(self):
         super(Controller, self).__init__()
         self.ui = Ui_Controller()
         self.ui.setupUi(self)
 
-        # 连接 lineEdit_Size 的文本变化信号到槽函数
+        # Connect lineEdit_Size's textChanged signal to the slot function
         self.ui.lineEidt_Size.textChanged.connect(self.on_size_changed)
-         # 连接 lineEdit_Angle 的文本变化信号到槽函数
+        # Connect lineEdit_Angle's textChanged signal to the slot function
         self.ui.lineEdit_Angle.textChanged.connect(self.on_angle_changed)
+        # Connect QSliderTransparency's valueChanged signal to the slot function
+        self.ui.QSliderTransparency.valueChanged.connect(self.on_transparency_changed)
 
     def on_size_changed(self, text):
         try:
             scale = float(text)
-            # print(f"Emitting sizeChanged signal with scale: {scale}")  # 调试输出
-            self.sizeChanged.emit(scale)  # 发出比例改变信号
+            self.sizeChanged.emit(scale)  # Emit sizeChanged signal
         except ValueError:
-            print("Invalid input for scale")  # 调试输出
-            pass  # 忽略无效的输入
+            pass  # Ignore invalid input
         
     def on_angle_changed(self, text):
         try:
             angle = float(text)
-            # print(f"Emitting angleChanged signal with angle: {angle}")  # 调试输出
-            self.angleChanged.emit(angle)  # 发出角度改变信号
+            self.angleChanged.emit(angle)  # Emit angleChanged signal
         except ValueError:
-            print("Invalid input for angle")  # 调试输出
-            pass  # 忽略无效的输入
+            pass  # Ignore invalid input
+
+    def on_transparency_changed(self, value):
+        self.transparencyChanged.emit(value)  # Emit transparencyChanged signal
 
 class ChildWindowMove(QMainWindow):
     moved = Signal(QPoint)  # 自定义信号，用于窗口移动时发送位置
@@ -112,32 +114,39 @@ class MainWindow(QMainWindow):
         self.ui.actionControl.triggered.connect(self.open_control_window)
         self.control_window = None
 
-        self.current_scale = 1.0  # 初始化比例为1
-        self.current_angle = 0.0  # 初始化角度为0
-        
-        self.setMinimumSize(200, 200)  # 设置主窗口的最小大小
+        self.current_scale = 1.0  # Initial scale
+        self.current_angle = 0.0  # Initial angle
+        self.current_transparency = 255  # Initial transparency (0-255)
+
+        self.setMinimumSize(200, 200)  # Set minimum window size
 
     def open_image(self):
         file_name, _ = QFileDialog.getOpenFileName(self, "Open Image File", "", "Image Files (*.png *.jpg *.bmp)")
         if file_name:
-            self.pixmap = QPixmap(file_name)  # 保存原始pixmap
-            print(f"Image loaded: {file_name}")  # 调试输出
+            self.pixmap = QPixmap(file_name)  # Save original pixmap
             self.update_image_size()
 
     def update_image_size(self):
         if hasattr(self, 'pixmap'):
             new_size = self.pixmap.size() * self.current_scale
-            print(f"Updating image size to: {new_size}")  # 调试输出
             transformed_pixmap = self.pixmap.scaled(new_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             transform = QTransform().rotate(self.current_angle)
             transformed_pixmap = transformed_pixmap.transformed(transform, Qt.SmoothTransformation)
-            self.image_label.setPixmap(transformed_pixmap)
+
+            # Apply transparency
+            transparent_pixmap = QPixmap(transformed_pixmap.size())
+            transparent_pixmap.fill(Qt.transparent)
+            painter = QPainter(transparent_pixmap)
+            painter.setOpacity(self.current_transparency / 255.0)
+            painter.drawPixmap(0, 0, transformed_pixmap)
+            painter.end()
+
+            self.image_label.setPixmap(transparent_pixmap)
             self.resize_main_window_to_image(transformed_pixmap.size())
 
     def resize_main_window_to_image(self, size):
         diagonal_length = math.sqrt(size.width() ** 2 + size.height() ** 2)
-        print(f"Resizing main window to diagonal length: {diagonal_length}")  # 调试输出
-        self.resize(diagonal_length, diagonal_length)
+        self.resize(max(200, diagonal_length), max(200, diagonal_length))
 
     def create_child_window(self):
         if self.child_window is None:
@@ -159,18 +168,29 @@ class MainWindow(QMainWindow):
     def open_control_window(self):
         if self.control_window is None:
             self.control_window = Controller()
-            self.control_window.sizeChanged.connect(self.on_scale_changed)  # 连接信号
-            self.control_window.angleChanged.connect(self.on_angle_changed)  # 连接信号
+            self.control_window.sizeChanged.connect(self.on_scale_changed)  # Connect signal
+            self.control_window.angleChanged.connect(self.on_angle_changed)  # Connect signal
+            self.control_window.transparencyChanged.connect(self.on_transparency_changed)  # Connect signal
+        
+        # Move control window to bottom-right corner of the screen
+        screen_geometry = QApplication.primaryScreen().geometry()
+        control_width = self.control_window.width()
+        control_height = self.control_window.height()
+        control_pos = QPoint(screen_geometry.width() - control_width, screen_geometry.height() - control_height - control_height // 3)
+        self.control_window.move(control_pos)
+        
         self.control_window.show()
 
     def on_scale_changed(self, scale):
-        print(f"Received scale change: {scale}")  # 调试输出
         self.current_scale = scale
         self.update_image_size()
-    
+
     def on_angle_changed(self, angle):
-        print(f"Received angle change: {angle}")  # 调试输出
         self.current_angle = angle
+        self.update_image_size()
+
+    def on_transparency_changed(self, transparency):
+        self.current_transparency = int((transparency / 100.0) * 255)
         self.update_image_size()
 
 
