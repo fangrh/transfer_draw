@@ -22,3 +22,7 @@ python main.py
 ```
 
 2. File -> Open to open the image
+
+## Video
+
+https://www.bilibili.com/video/BV1kx8ZeKEZG/?vd_source=bf315b263db64a365c17d5b81360a0e6
