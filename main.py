@@ -8,6 +8,8 @@ import sys
 import math
 import numpy as np
 
+#1234
+
 class Controller(QMainWindow):
     sizeChanged = Signal(float)
     angleChanged = Signal(float)
