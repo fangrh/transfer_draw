@@ -30,6 +30,7 @@
     <addaction name="actionOpen"/>
     <addaction name="actionClose"/>
     <addaction name="actionMinimize"/>
+    <addaction name="actionExport"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -65,6 +66,11 @@
   <action name="actionControl">
    <property name="text">
     <string>Control</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export</string>
    </property>
   </action>
  </widget>

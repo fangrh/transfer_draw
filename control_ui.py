@@ -51,7 +51,7 @@ class Ui_Controller(object):
         self.lineEdit_Size = QDoubleSpinBox(self.layoutWidget)
         self.lineEdit_Size.setObjectName(u"lineEdit_Size")
         self.lineEdit_Size.setDecimals(6)
-        self.lineEdit_Size.setValue(1.000000000000000)
+        self.lineEdit_Size.setValue(0.300000000000000)
 
         self.gridLayout.addWidget(self.lineEdit_Size, 1, 1, 1, 2)
 

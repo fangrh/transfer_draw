@@ -170,6 +170,7 @@ class MainWindow(QMainWindow):
         self.ui.actionClose.triggered.connect(self.close_all_windows)
         self.ui.actionMinimize.triggered.connect(self.showMinimized)
         self.ui.actionMove.triggered.connect(self.create_child_window)
+        self.ui.actionExport.triggered.connect(self.export_image)
         self.child_window = None
         self.ui.actionControl.triggered.connect(self.open_control_window)
         self.control_window = None
@@ -195,11 +196,29 @@ class MainWindow(QMainWindow):
         self.move(x, y)
     
     def open_image(self):
-        file_name, _ = QFileDialog.getOpenFileName(self, "Open Image File", "", "Image Files (*.png *.jpg *.bmp)")
+        file_name, _ = QFileDialog.getOpenFileName(self, "Open Image File", "", "Image Files (*.png *.jpg *.bmp *.jpeg *.gif *.tif *.tiff *.webp)")
         if file_name:
             self.pixmap = QPixmap(file_name)
             self.image = cv2.imread(file_name)
             self.update_image_size()
+            
+    def export_image(self):
+        # 确保QApplication已经存在
+        file_dialog = QFileDialog()
+        file_dialog.setAcceptMode(QFileDialog.AcceptSave)
+        file_dialog.setNameFilters(["PNG files (*.png)", "JPEG files (*.jpg)", "BMP files (*.bmp)", "All files (*.*)"])
+        file_dialog.setDefaultSuffix("png")
+        
+        if file_dialog.exec():
+            file_path = file_dialog.selectedFiles()[0]
+            
+            if file_path and self.pixmap_export:
+                # 保存pixmap到文件
+                image = self.pixmap_export.toImage()
+                image.save(file_path)
+                print(f"Image saved to {file_path}")
+            else:
+                print("Save operation canceled.")
 
     def update_image_size(self):
         if hasattr(self, 'pixmap'):
@@ -224,6 +243,9 @@ class MainWindow(QMainWindow):
 
             self.image_label.setPixmap(transparent_pixmap)
             self.resize_main_window_to_image(transformed_pixmap.size())
+            
+            # 更新pixmap以用于保存
+            self.pixmap_export = transparent_pixmap    
 
     def get_contour_image(self, image, threshold1, threshold2, color_name, scale, angle, mirror_enabled):
         # Resize the image
