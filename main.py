@@ -253,6 +253,10 @@ class MainWindow(QMainWindow):
         new_size = (int(width * scale), int(height * scale))
         resized_image = cv2.resize(image, new_size)
 
+        # Fix problem of angle not correectly applied when contour image
+        if not mirror_enabled:
+            angle = -angle
+        
         # Rotate the image
         center = (new_size[0] // 2, new_size[1] // 2)
         rot_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
