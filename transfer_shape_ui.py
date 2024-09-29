@@ -36,6 +36,8 @@ class Ui_TransferShape(object):
         self.actionControl.setObjectName(u"actionControl")
         self.actionExport = QAction(TransferShape)
         self.actionExport.setObjectName(u"actionExport")
+        self.actionCut = QAction(TransferShape)
+        self.actionCut.setObjectName(u"actionCut")
         self.centralwidget = QWidget(TransferShape)
         self.centralwidget.setObjectName(u"centralwidget")
         TransferShape.setCentralWidget(self.centralwidget)
@@ -59,6 +61,7 @@ class Ui_TransferShape(object):
         self.menuFile.addAction(self.actionExport)
         self.menuTools.addAction(self.actionMove)
         self.menuTools.addAction(self.actionControl)
+        self.menuTools.addAction(self.actionCut)
 
         self.retranslateUi(TransferShape)
 
@@ -73,6 +76,7 @@ class Ui_TransferShape(object):
         self.actionMove.setText(QCoreApplication.translate("TransferShape", u"Move", None))
         self.actionControl.setText(QCoreApplication.translate("TransferShape", u"Control", None))
         self.actionExport.setText(QCoreApplication.translate("TransferShape", u"Export", None))
+        self.actionCut.setText(QCoreApplication.translate("TransferShape", u"Cut", None))
         self.menuFile.setTitle(QCoreApplication.translate("TransferShape", u"File", None))
         self.menuTools.setTitle(QCoreApplication.translate("TransferShape", u"Tools", None))
     # retranslateUi

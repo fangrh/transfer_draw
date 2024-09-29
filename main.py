@@ -222,17 +222,19 @@ class MainWindow(QMainWindow):
 
     def update_image_size(self):
         if hasattr(self, 'pixmap'):
-            new_size = self.pixmap.size() * self.current_scale
-            transformed_pixmap = self.pixmap.scaled(new_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            if self.outline_enabled:
+                contour_image = self.get_contour_image(self.image, self.threshold1, self.threshold2, self.outline_color)
+                qimage = QImage(contour_image.data, contour_image.shape[1], contour_image.shape[0], contour_image.strides[0], QImage.Format_ARGB32)
+                pixmap = QPixmap.fromImage(qimage)
+            else:
+                pixmap = self.pixmap
+                
+            new_size = pixmap.size() * self.current_scale
+            transformed_pixmap = pixmap.scaled(new_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             transform = QTransform().rotate(self.current_angle)
             if self.mirror_enabled:
                 transform.scale(-1, 1)
             transformed_pixmap = transformed_pixmap.transformed(transform, Qt.SmoothTransformation)
-
-            if self.outline_enabled:
-                contour_image = self.get_contour_image(self.image, self.threshold1, self.threshold2, self.outline_color, self.current_scale, self.current_angle, self.mirror_enabled)
-                qimage = QImage(contour_image.data, contour_image.shape[1], contour_image.shape[0], contour_image.strides[0], QImage.Format_ARGB32)
-                transformed_pixmap = QPixmap.fromImage(qimage)
 
             transparent_pixmap = QPixmap(transformed_pixmap.size())
             transparent_pixmap.fill(Qt.transparent)
@@ -242,31 +244,16 @@ class MainWindow(QMainWindow):
             painter.end()
 
             self.image_label.setPixmap(transparent_pixmap)
-            self.resize_main_window_to_image(transformed_pixmap.size())
+            # self.resize_main_window_to_image(transformed_pixmap.size())
             
             # 更新pixmap以用于保存
             self.pixmap_export = transparent_pixmap    
-
-    def get_contour_image(self, image, threshold1, threshold2, color_name, scale, angle, mirror_enabled):
+    
+    def get_contour_image(self, image, threshold1, threshold2, color_name):
         # Resize the image
         height, width = image.shape[:2]
-        new_size = (int(width * scale), int(height * scale))
-        resized_image = cv2.resize(image, new_size)
 
-        # Fix problem of angle not correectly applied when contour image
-        if not mirror_enabled:
-            angle = -angle
-        
-        # Rotate the image
-        center = (new_size[0] // 2, new_size[1] // 2)
-        rot_matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
-        rotated_image = cv2.warpAffine(resized_image, rot_matrix, new_size)
-
-        # Mirror the image if needed
-        if mirror_enabled:
-            rotated_image = cv2.flip(rotated_image, 1)
-
-        gray = cv2.cvtColor(rotated_image, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         edges = cv2.Canny(gray, threshold1, threshold2)
 
         transparent_image = np.zeros((edges.shape[0], edges.shape[1], 4), dtype=np.uint8)

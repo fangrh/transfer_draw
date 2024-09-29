@@ -38,6 +38,7 @@
     </property>
     <addaction name="actionMove"/>
     <addaction name="actionControl"/>
+    <addaction name="actionCut"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -71,6 +72,11 @@
   <action name="actionExport">
    <property name="text">
     <string>Export</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="text">
+    <string>Cut</string>
    </property>
   </action>
  </widget>

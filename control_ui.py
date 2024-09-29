@@ -23,7 +23,7 @@ class Ui_Controller(object):
     def setupUi(self, Controller):
         if not Controller.objectName():
             Controller.setObjectName(u"Controller")
-        Controller.resize(275, 383)
+        Controller.resize(275, 354)
         self.layoutWidget = QWidget(Controller)
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.layoutWidget.setGeometry(QRect(10, 25, 252, 311))
@@ -51,7 +51,7 @@ class Ui_Controller(object):
         self.lineEdit_Size = QDoubleSpinBox(self.layoutWidget)
         self.lineEdit_Size.setObjectName(u"lineEdit_Size")
         self.lineEdit_Size.setDecimals(6)
-        self.lineEdit_Size.setValue(0.300000000000000)
+        self.lineEdit_Size.setValue(1.000000000000000)
 
         self.gridLayout.addWidget(self.lineEdit_Size, 1, 1, 1, 2)
 
@@ -156,7 +156,7 @@ class Ui_Controller(object):
 
         self.QSlider_threshold1 = QSlider(self.layoutWidget)
         self.QSlider_threshold1.setObjectName(u"QSlider_threshold1")
-        self.QSlider_threshold1.setMaximum(1000)
+        self.QSlider_threshold1.setMaximum(100)
         self.QSlider_threshold1.setValue(50)
         self.QSlider_threshold1.setOrientation(Qt.Horizontal)
 
@@ -169,7 +169,7 @@ class Ui_Controller(object):
 
         self.QSlider_threshold2 = QSlider(self.layoutWidget)
         self.QSlider_threshold2.setObjectName(u"QSlider_threshold2")
-        self.QSlider_threshold2.setMaximum(1000)
+        self.QSlider_threshold2.setMaximum(100)
         self.QSlider_threshold2.setValue(50)
         self.QSlider_threshold2.setOrientation(Qt.Horizontal)
 
