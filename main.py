@@ -13,6 +13,12 @@ import numpy as np
 class Controller(QMainWindow):
     sizeChanged = Signal(float)
     angleChanged = Signal(float)
+    cutXLeftChanged = Signal(float)
+    cutXRightChanged = Signal(float)
+    cutYTopChanged = Signal(float)
+    cutYBottomChanged = Signal(float)
+    xPositionChanged = Signal(float)
+    yPositionChanged = Signal(float)
     transparencyChanged = Signal(int)
     mirrorChanged = Signal(bool)
     outlineChanged = Signal(bool)
@@ -28,6 +34,12 @@ class Controller(QMainWindow):
         # Connect UI signals to the slot functions
         self.ui.lineEdit_Size.valueChanged.connect(self.on_size_changed)
         self.ui.lineEdit_Angle.valueChanged.connect(self.on_angle_changed)
+        self.ui.lineEdit_Xposition.valueChanged.connect(self.on_x_position_changed)
+        self.ui.lineEdit_Yposition.valueChanged.connect(self.on_y_position_changed)
+        self.ui.QSliderCutXLeft.valueChanged.connect(self.on_cut_x_left_changed)
+        self.ui.QSliderCutXRight.valueChanged.connect(self.on_cut_x_right_changed)
+        self.ui.QSliderCutYLeft.valueChanged.connect(self.on_cut_y_top_changed)
+        self.ui.QSliderCutYRight.valueChanged.connect(self.on_cut_y_bottom_changed)
         self.ui.QSliderTransparency.valueChanged.connect(self.on_transparency_changed)
         self.ui.QCheckBoxMirror.stateChanged.connect(self.on_mirror_changed)
         self.ui.QCheckBoxOutline.stateChanged.connect(self.on_outline_changed)
@@ -47,6 +59,24 @@ class Controller(QMainWindow):
 
     def on_angle_changed(self, value):
         self.angleChanged.emit(value)
+        
+    def on_x_position_changed(self, value):
+        self.xPositionChanged.emit(value)
+    
+    def on_y_position_changed(self, value):
+        self.yPositionChanged.emit(value)
+        
+    def on_cut_x_left_changed(self, value):
+        self.cutXLeftChanged.emit(value)
+        
+    def on_cut_x_right_changed(self, value):
+        self.cutXRightChanged.emit(value)
+        
+    def on_cut_y_top_changed(self, value):
+        self.cutYTopChanged.emit(value)
+        
+    def on_cut_y_bottom_changed(self, value):
+        self.cutYBottomChanged.emit(value)
 
     def on_transparency_changed(self, value):
         self.transparencyChanged.emit(value)
@@ -177,6 +207,12 @@ class MainWindow(QMainWindow):
 
         self.current_scale = 1.0
         self.current_angle = 0.0
+        self.current_x_position = 0.0
+        self.current_y_position = 0.0
+        self.cut_x_left = 0
+        self.cut_x_right = 100
+        self.cut_y_top = 0
+        self.cut_y_bottom = 100
         self.current_transparency = 255
         self.mirror_enabled = False
         self.outline_enabled = False
@@ -228,9 +264,9 @@ class MainWindow(QMainWindow):
                 pixmap = QPixmap.fromImage(qimage)
             else:
                 pixmap = self.pixmap
-                
             new_size = pixmap.size() * self.current_scale
             transformed_pixmap = pixmap.scaled(new_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            transformed_pixmap = self.crop_to_window_size(transformed_pixmap)
             transform = QTransform().rotate(self.current_angle)
             if self.mirror_enabled:
                 transform.scale(-1, 1)
@@ -238,6 +274,7 @@ class MainWindow(QMainWindow):
 
             transparent_pixmap = QPixmap(transformed_pixmap.size())
             transparent_pixmap.fill(Qt.transparent)
+            
             painter = QPainter(transparent_pixmap)
             painter.setOpacity(self.current_transparency / 255.0)
             painter.drawPixmap(0, 0, transformed_pixmap)
@@ -248,6 +285,14 @@ class MainWindow(QMainWindow):
             
             # 更新pixmap以用于保存
             self.pixmap_export = transparent_pixmap    
+            
+    def crop_to_window_size(self, pixmap):
+        # Get the size of the window
+        window_size = self.size()  # Assuming this is the MainWindow's size
+        # Create a new pixmap for the cropped area
+        cropped_pixmap = pixmap.copy(pixmap.width()*self.cut_x_left/100, pixmap.height()*self.cut_y_top/100, pixmap.width()*self.cut_x_right/100, pixmap.height()*self.cut_y_bottom/100)
+        print(pixmap.width()+self.current_x_position, pixmap.height()+self.current_y_position)
+        return cropped_pixmap
     
     def get_contour_image(self, image, threshold1, threshold2, color_name):
         # Resize the image
@@ -301,6 +346,12 @@ class MainWindow(QMainWindow):
             self.control_window = Controller()
             self.control_window.sizeChanged.connect(self.on_scale_changed)
             self.control_window.angleChanged.connect(self.on_angle_changed)
+            self.control_window.xPositionChanged.connect(self.on_x_position_changed)
+            self.control_window.yPositionChanged.connect(self.on_y_position_changed)
+            self.control_window.cutXLeftChanged.connect(self.on_cut_x_left_changed)
+            self.control_window.cutXRightChanged.connect(self.on_cut_x_right_changed)
+            self.control_window.cutYTopChanged.connect(self.on_cut_y_top_changed)
+            self.control_window.cutYBottomChanged.connect(self.on_cut_y_bottom_changed)
             self.control_window.transparencyChanged.connect(self.on_transparency_changed)
             self.control_window.mirrorChanged.connect(self.on_mirror_changed)
             self.control_window.outlineChanged.connect(self.on_outline_changed)
@@ -323,7 +374,32 @@ class MainWindow(QMainWindow):
     def on_angle_changed(self, angle):
         self.current_angle = angle
         self.update_image_size()
+        
+    def on_x_position_changed(self, x_position):
+        self.current_x_position = x_position
+        self.update_image_size()
 
+    def on_y_position_changed(self, y_position):
+        self.current_y_position = y_position
+        self.update_image_size()
+        
+    def on_cut_x_left_changed(self, cut_x_left):
+        self.cut_x_left = cut_x_left
+        self.update_image_size()
+    
+    def on_cut_x_right_changed(self, cut_x_right):
+        self.cut_x_right = cut_x_right
+        self.update_image_size()
+    
+    def on_cut_y_top_changed(self, cut_y_top):
+        self.cut_y_top = cut_y_top
+        self.update_image_size()
+        
+    def on_cut_y_bottom_changed(self, cut_y_bottom):
+        self.cut_y_bottom = cut_y_bottom
+        self.update_image_size()
+        
+        
     def on_transparency_changed(self, transparency):
         self.current_transparency = int((transparency / 100.0) * 255)
         self.update_image_size()
