@@ -34,8 +34,6 @@ class Controller(QMainWindow):
         # Connect UI signals to the slot functions
         self.ui.lineEdit_Size.valueChanged.connect(self.on_size_changed)
         self.ui.lineEdit_Angle.valueChanged.connect(self.on_angle_changed)
-        self.ui.lineEdit_Xposition.valueChanged.connect(self.on_x_position_changed)
-        self.ui.lineEdit_Yposition.valueChanged.connect(self.on_y_position_changed)
         self.ui.QSliderCutXLeft.valueChanged.connect(self.on_cut_x_left_changed)
         self.ui.QSliderCutXRight.valueChanged.connect(self.on_cut_x_right_changed)
         self.ui.QSliderCutYLeft.valueChanged.connect(self.on_cut_y_top_changed)
@@ -346,8 +344,6 @@ class MainWindow(QMainWindow):
             self.control_window = Controller()
             self.control_window.sizeChanged.connect(self.on_scale_changed)
             self.control_window.angleChanged.connect(self.on_angle_changed)
-            self.control_window.xPositionChanged.connect(self.on_x_position_changed)
-            self.control_window.yPositionChanged.connect(self.on_y_position_changed)
             self.control_window.cutXLeftChanged.connect(self.on_cut_x_left_changed)
             self.control_window.cutXRightChanged.connect(self.on_cut_x_right_changed)
             self.control_window.cutYTopChanged.connect(self.on_cut_y_top_changed)
@@ -373,14 +369,6 @@ class MainWindow(QMainWindow):
 
     def on_angle_changed(self, angle):
         self.current_angle = angle
-        self.update_image_size()
-        
-    def on_x_position_changed(self, x_position):
-        self.current_x_position = x_position
-        self.update_image_size()
-
-    def on_y_position_changed(self, y_position):
-        self.current_y_position = y_position
         self.update_image_size()
         
     def on_cut_x_left_changed(self, cut_x_left):
